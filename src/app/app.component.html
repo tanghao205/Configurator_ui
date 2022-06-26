@@ -1,0 +1,94 @@
+
+<div class="toolbar" role="banner">
+  <img
+    width="40"
+    alt="Angular Logo"
+    src="/assets/logo.jpg"
+  />
+</div>
+
+<div class="content" role="main">
+
+  <div class="card-container" >
+    <h1>{{title}}</h1>
+  </div>
+
+
+  <div *ngIf="showModel && !submitted">
+
+    <div class="example-container" >
+      <h2>Please Select Model (Make sure check the checkbox)</h2>
+    </div>
+  
+    <div class="example-container" >
+      <mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="checked">
+          <mat-header-cell *matHeaderCellDef>Selection</mat-header-cell>
+          <mat-cell *matCellDef="let element"> 
+            <mat-checkbox [(ngModel)]="element.checked"></mat-checkbox>
+          </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="modelName">
+          <mat-header-cell *matHeaderCellDef> Model </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.modelName}} </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="modelDisplayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: modelDisplayedColumns;" [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}" (click)="onSelect(row)" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+
+
+  <div class="example-container" *ngIf="!showModel && !submitted">
+
+    <div class="example-container" >
+      <h2>Please Select Options for {{getMdoel()}} (Make sure check the checkbox)</h2>
+    </div>
+
+    <mat-table #table [dataSource]="optionDataSource">
+  
+      <ng-container matColumnDef="checked">
+        <mat-header-cell *matHeaderCellDef>Selection</mat-header-cell>
+        <mat-cell *matCellDef="let element"> 
+          <mat-checkbox [(ngModel)]="element.checked"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="option">
+        <mat-header-cell *matHeaderCellDef> Option </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.option}} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="optionDisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: optionDisplayedColumns;" [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}" (click)="onOptionSelect(row)" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></mat-row>
+    
+    </mat-table>
+  </div>
+
+
+  <div class="card-container" *ngIf="submitted">
+    <h2>Your order {{orderNumber}} is submitted successfully!</h2>
+  </div>
+
+  <div class="card-container" *ngIf="selectedModel.size === 1 && showModel && !submitted">
+    <button class="card card-small" diabled="selectedModel.size > 1" (click)="onSelectClick()">Select</button>
+  </div>
+
+  <div class="card-container" *ngIf="selectedModel.size > 1 && !submitted">
+    <h2>Please select only one item.</h2>
+  </div>
+
+  <div class="card-container" *ngIf="!showModel && !submitted">
+    <button class="card card-small" diabled="selectedModel.size > 1" (click)="onOrderClick()">Order</button>
+    <button class="card card-small" diabled="selectedModel.size > 1" (click)="onReturnClick()">Return</button>
+  </div>
+
+  <div class="card-container" *ngIf="submitted">
+    <button class="card card-small" diabled="selectedModel.size > 1" (click)="onConfirm()">Confirm</button>
+  </div>
+
+</div>
+
+<router-outlet></router-outlet>
